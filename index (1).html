@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Ayiti – Le livre d’Haïti</title>
+<meta name="author" content="Jean Grégory">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,700&family=Source+Sans+3:wght@400;600&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#f3eee3;--ink:#1d2433;--mut:#5b6272;--red:#c8102e;--blue:#0f1b3d;--card:#fbf8f1;--line:#d9cfbb;--chip:#e6dcc6;--chipink:#1d2433;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px);color-scheme:light}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#10162b;--ink:#ebe6d9;--mut:#a9aebd;--card:#182040;--line:#2b3558;--chip:#243058;--chipink:#ebe6d9;color-scheme:dark}}
+:root[data-theme="dark"]{--bg:#10162b;--ink:#ebe6d9;--mut:#a9aebd;--card:#182040;--line:#2b3558;--chip:#243058;--chipink:#ebe6d9;color-scheme:dark}
+html{scroll-padding-top:env(safe-area-inset-top,0px);scroll-behavior:smooth}
+*,*::before,*::after{box-sizing:inherit}
+body{margin:0;background:var(--bg);color:var(--ink);font:18px/1.6 "Source Sans 3",system-ui,sans-serif}
+h1,h2,h3{font-family:Fraunces,Georgia,serif;line-height:1.15;margin:0}
+.hero{min-height:92vh;min-height:92svh;display:flex;flex-direction:column;justify-content:flex-end;padding:24px 20px 36px;color:#fff;background:linear-gradient(180deg,rgba(8,14,34,.25) 0%,rgba(8,14,34,.8) 100%),var(--photo,linear-gradient(180deg,#34527f 0%,#8fa9b8 52%,#42603f 53%,#24391f 100%));background-size:cover;background-position:center}
+.hero h1{font-size:clamp(56px,16vw,120px);font-weight:700;letter-spacing:-.02em}
+.hero p{max-width:34ch;font-size:1.15rem;margin:10px 0 24px}
+.search{display:flex;gap:8px;max-width:560px}
+.search input{flex:1;min-width:0;font:inherit;padding:14px 16px;border-radius:12px;border:2px solid transparent;background:rgba(255,255,255,.95);color:#1d2433}
+button,.btn{font:inherit;font-weight:600;cursor:pointer;border:0;border-radius:12px;padding:12px 18px;background:var(--red);color:#fff;display:inline-block}
+button:focus-visible,input:focus-visible,.btn:focus-within,select:focus-visible{outline:3px solid #e0b252;outline-offset:2px}
+.photo{margin-top:18px;font-size:.9rem;background:transparent;border:1px solid rgba(255,255,255,.6);padding:8px 12px;cursor:pointer;color:#fff}
+.photo input{display:none}
+nav{position:sticky;top:env(safe-area-inset-top,0px);z-index:5;background:var(--bg);border-bottom:1px solid var(--line);display:flex;gap:8px;overflow-x:auto;padding:12px 16px}
+nav button{background:var(--chip);color:var(--chipink);white-space:nowrap;padding:8px 14px}
+nav button[aria-pressed="true"]{background:var(--blue);color:#fff}
+main{max-width:720px;margin:0 auto;padding:28px 18px 120px}
+.head{display:flex;justify-content:space-between;align-items:center;gap:12px;margin-bottom:8px}
+.head h2{font-size:2rem}
+.ghost{background:transparent;color:var(--ink);border:1px solid var(--line);padding:8px 12px;font-size:.9rem}
+article{background:var(--card);border:1px solid var(--line);border-left:5px solid var(--red);border-radius:6px;padding:18px 18px 16px;margin:16px 0}
+article h3{font-size:1.3rem;margin-bottom:8px}
+article p{margin:0 0 12px}
+.note{color:var(--mut)}
+a{color:var(--red);font-weight:600}
+.detente{margin-top:40px;padding:20px;border-radius:12px;background:var(--blue);color:#fff}
+.detente h2{margin-bottom:8px}
+.detente .row{display:flex;flex-wrap:wrap;gap:10px;margin:14px 0}
+.detente .btn.alt{background:#fff;color:#0f1b3d}
+audio{width:100%;margin-top:6px}
+.fab{position:fixed;right:16px;bottom:calc(16px + env(safe-area-inset-bottom,0px));width:56px;height:56px;border-radius:50%;padding:0;font-size:1.5rem;box-shadow:0 4px 14px rgba(0,0,0,.35)}
+footer{max-width:720px;margin:0 auto;padding:0 18px 110px;color:var(--mut);font-size:.95rem;border-top:1px solid var(--line);padding-top:18px}
+footer strong{color:var(--ink)}
+@media (prefers-reduced-motion:reduce){html{scroll-behavior:auto}}
+</style>
+</head>
+<body>
+<header class="hero" id="hero">
+  <h1>Ayiti</h1>
+  <p>Le livre d’Haïti : histoire, culture, sport, religion, à lire et à écouter.</p>
+  <div class="search">
+    <input id="q" type="search" placeholder="Rechercher : Toussaint, vodou, joumou…" aria-label="Rechercher une information">
+    <button id="go">Chercher</button>
+  </div>
+  <label class="btn photo">Choisir ma photo de la Citadelle Laferrière<input id="pic" type="file" accept="image/*"></label>
+</header>
+<nav id="nav" aria-label="Chapitres"></nav>
+<main>
+  <div class="head"><h2 id="title"></h2><button class="ghost" id="readAll">Écouter</button></div>
+  <div id="list"></div>
+  <section class="detente" id="detente">
+    <h2>Détente</h2>
+    <p>Une ambiance sonore douce, ou votre propre musique.</p>
+    <div class="row">
+      <button id="amb">Lancer l’ambiance</button>
+      <label class="btn alt">Choisir ma musique<input id="files" type="file" accept="audio/*" multiple hidden></label>
+    </div>
+    <audio id="player" controls hidden></audio>
+  </section>
+</main>
+<footer>
+  <p>Site créé et géré par <strong>Jean Grégory</strong>, ingénieur informatique, propriétaire du site.<br>Contact : <a href="mailto:jeangregory892@gmail.com">jeangregory892@gmail.com</a></p>
+  <p><button class="ghost" id="names">Guide des noms de photos</button></p>
+  <div id="slugs" hidden style="white-space:pre-wrap;font-size:.8rem"></div>
+</footer>
+<button class="fab" id="fab" aria-label="Ambiance sonore">♪</button>
+<script>
+var D=[
+{id:"histoire",t:"Histoire",e:[
+["Au commencement : Ayiti avant Colomb","Bien avant l’arrivée des Européens, l’île était habitée par des peuples venus des Amériques. Les derniers à s’y installer, les Taïnos, l’appelaient Ayiti, « la terre des hautes montagnes ». Ils cultivaient le manioc, le maïs et le coton, pêchaient en pirogue et dormaient dans des hamacs. Plusieurs mots français viennent de leur langue : hamac, canot, ouragan, tabac."],
+["Les cinq royaumes taïnos","L’île était divisée en cinq grands territoires dirigés par des caciques : Marién, Maguana, Magua, Xaragua et Higüey. Parmi les chefs les plus connus, on trouve Guacanagaríx, Caonabo, Guarionex et la reine Anacaona, poétesse et cheffe du Xaragua."],
+["Décembre 1492 : Colomb arrive","Le 5 décembre 1492, Christophe Colomb aborde l’île près du Môle Saint-Nicolas. Le soir de Noël, son navire, la Santa María, s’échoue près de l’actuel Cap-Haïtien. Avec ses planches, les Espagnols bâtissent le fort de La Navidad, avec l’aide du cacique Guacanagaríx. Ce fort est détruit peu après."],
+["La disparition des Taïnos","En quelques décennies, les maladies venues d’Europe, les travaux forcés et la violence font disparaître presque toute la population taïno. Anacaona est exécutée en 1503. Pour remplacer cette main-d’œuvre, les Espagnols commencent à faire venir des Africains réduits en esclavage dès le début du XVIe siècle."],
+["1625–1697 : les boucaniers de la Tortue","Dès 1625, des Français s’installent sur l’île de la Tortue, au large du nord d’Haïti, avec des boucaniers et des flibustiers. Peu à peu, ils gagnent la côte ouest de l’île. En 1685, le Code noir fixe les règles de l’esclavage dans les colonies françaises."],
+["1697 : Saint-Domingue, colonie française","Le traité de Ryswick cède à la France la partie ouest de l’île. Grâce au sucre et au café, Saint-Domingue devient l’une des colonies les plus riches du monde, au prix du travail de centaines de milliers de personnes réduites en esclavage."],
+["La société coloniale","Vers 1789, Saint-Domingue compte environ 500 000 esclaves, quelques dizaines de milliers de colons blancs et à peu près autant de libres de couleur, souvent propriétaires eux-mêmes. La résistance existe dès le début : le marronnage, et la révolte de François Mackandal, exécuté au Cap en 1758. En 1790, Vincent Ogé réclame l’égalité des droits pour les libres de couleur et il est exécuté."],
+["1791 : le soulèvement","Dans la nuit du 14 août 1791, la cérémonie du Bois-Caïman, associée à Dutty Boukman, marque le début de la révolution. Toussaint Louverture devient le grand chef de l’armée des anciens esclaves. Arrêté par les Français en 1802, il meurt au fort de Joux en 1803."],
+["1793–1802 : de l’abolition à l’expédition de Leclerc","En 1793, le commissaire Sonthonax proclame la liberté des esclaves dans le nord, et la France abolit l’esclavage en 1794. Toussaint Louverture gouverne la colonie et promulgue une constitution en 1801. En 1802, Napoléon envoie une armée, dirigée par le général Leclerc, pour rétablir l’ancien ordre."],
+["1803–1804 : l’indépendance","Le 18 mai 1803, à l’Arcahaie, naît le drapeau haïtien. Le 18 novembre 1803, les troupes de Jean-Jacques Dessalines l’emportent à Vertières. Le 1er janvier 1804, l’indépendance est proclamée aux Gonaïves : Haïti est la première république noire et le premier État né d’une révolte d’esclaves victorieuse."],
+["1804–1806 : Dessalines","Dessalines se fait couronner empereur sous le nom de Jacques Ier en octobre 1804. Le pays reprend le nom taïno d’Haïti. Il est assassiné au Pont-Rouge le 17 octobre 1806."],
+["1806–1820 : deux États, une nation","Après la mort de Dessalines, le pays se divise. Au sud, Alexandre Pétion dirige une république. En 1816, il aide Simón Bolívar, en demandant en retour l’abolition de l’esclavage. Au nord, Henri Christophe devient roi en 1811 et fait construire la Citadelle Laferrière et le palais de Sans-Souci. Il met fin à ses jours en 1820."],
+["1822 : l’île réunifiée","Jean-Pierre Boyer, successeur de Pétion, réunit le pays en 1820, puis prend la partie est de l’île en 1822. Toute l’île est dirigée depuis Port-au-Prince jusqu’en 1844, année de l’indépendance de la République dominicaine."],
+["1825 : la dette de l’indépendance","La France ne reconnaît l’indépendance qu’en échange d’une lourde indemnité, fixée à 150 millions de francs-or puis ramenée à 90 millions en 1838. Le remboursement a pesé sur l’économie haïtienne pendant plus d’un siècle."],
+["1843–1915 : un siècle d’instabilité","Boyer est renversé en 1843. Faustin Soulouque se proclame empereur en 1849. De nombreux présidents se succèdent ensuite, souvent par la force. En 1885, Anténor Firmin publie « De l’égalité des races humaines », une réponse aux théories racistes de son époque."],
+["1915–1934 : l’occupation américaine","Le 28 juillet 1915, les marines débarquent à Port-au-Prince. L’occupation dure 19 ans. Elle impose la corvée et provoque la résistance des cacos, dont le chef Charlemagne Péralte est tué en 1919. Les troupes se retirent en 1934."],
+["1934–1957 : de l’après-occupation à Duvalier","Dumarsais Estimé arrive au pouvoir en 1946, porté par un mouvement de la jeunesse et de la classe moyenne noire. Paul Magloire gouverne de 1950 à 1956. Une période agitée mène ensuite à l’élection de François Duvalier en 1957."],
+["1957–1986 : les Duvalier","François Duvalier, dit Papa Doc, impose une dictature et s’appuie sur la milice des Volontaires de la sécurité nationale, appelés Tontons Macoutes. À sa mort en 1971, son fils Jean-Claude, 19 ans, lui succède. Il quitte le pays le 7 février 1986 sous la pression populaire."],
+["1986–2004 : la quête de la démocratie","La Constitution de 1987 est adoptée par référendum. Jean-Bertrand Aristide est élu en 1990, renversé par l’armée en 1991, puis rétabli en 1994. René Préval est président de 1996 à 2001. Aristide revient au pouvoir en 2001, puis quitte le pays le 29 février 2004."],
+["2004–2010 : la MINUSTAH et le séisme","Une mission de l’ONU, la MINUSTAH, est déployée de 2004 à 2017. Le 12 janvier 2010, un séisme de magnitude 7 frappe la région de Port-au-Prince et de Léogâne. Selon les estimations, il fait entre 100 000 et plus de 300 000 morts. Une épidémie de choléra suit en octobre 2010."],
+["2011–2021 : Martelly, Moïse et les crises","Michel Martelly gouverne de 2011 à 2016. Jovenel Moïse prend ses fonctions en 2017, après le passage de l’ouragan Matthew en 2016. En 2018 et 2019, des manifestations dénoncent la corruption liée aux fonds PetroCaribe."],
+["2021 : un président assassiné","Le 7 juillet 2021, Jovenel Moïse est assassiné chez lui. Le 14 août, un séisme de magnitude 7,2 frappe le sud du pays et fait environ 2 200 morts. Dans cette période d’instabilité, les groupes armés étendent leur contrôle sur Port-au-Prince."],
+["2024 : le Conseil présidentiel de transition","Fin février 2024, des attaques coordonnées de groupes armés, réunis dans la coalition Viv Ansanm, paralysent la capitale. Le Premier ministre Ariel Henry annonce sa démission. Un Conseil présidentiel de transition s’installe en avril. Une mission multinationale dirigée par le Kenya arrive en juin. En novembre, Alix Didier Fils-Aimé devient Premier ministre."],
+["2025–2026 : sécurité et fin de la transition","Selon l’ONU, environ 90 % de Port-au-Prince était sous le contrôle de groupes armés en 2025, et au moins 4 384 personnes ont été tuées par des groupes criminels entre janvier et septembre 2025. Fin septembre 2025, le Conseil de sécurité de l’ONU autorise une force de répression des gangs. Le mandat du Conseil présidentiel de transition prend fin le 7 février 2026, et l’exécutif passe au gouvernement du Premier ministre Alix Didier Fils-Aimé."],
+["Fin 2026 : le vote repoussé","Les dernières élections datent de 2016. Un premier calendrier prévoyait un premier tour le 30 août 2026, puis un second calendrier le 13 décembre 2026. Début octobre 2026, le Conseil électoral provisoire a repoussé le scrutin sans nouvelle date. Le 28 octobre, il a publié un calendrier actualisé : premier tour le 18 juillet 2027 et second tour le 4 octobre 2027. Cette page sera mise à jour avec la suite."]]},
+{id:"culture",t:"Culture",e:[
+["Langues","Le créole haïtien et le français sont les deux langues officielles. Le créole est parlé par toute la population."],
+["Peinture","La peinture haïtienne est célèbre dans le monde. Hector Hyppolite, Philomé Obin et les artistes du mouvement Saint-Soleil ont fait connaître un art coloré, inspiré de la vie quotidienne, de l’histoire et du vodou."],
+["Musique","Le kompa, popularisé par Nemours Jean-Baptiste, est la grande danse haïtienne. La musique racine (mizik rasin) mêle tambours vodou et guitares. Le rara anime les rues à l’approche de Pâques, et le carnaval fait vibrer les villes chaque année."],
+["Littérature","Jacques Roumain a écrit « Gouverneurs de la rosée ». Jacques Stephen Alexis, Marie Vieux-Chauvet, Edwidge Danticat et Dany Laferrière font rayonner les lettres haïtiennes. Dany Laferrière est entré à l’Académie française en 2013."],
+["Symboles nationaux","Le drapeau bleu et rouge naît à l’Arcahaie le 18 mai 1803, quand Dessalines déchire le blanc du drapeau français. Selon la tradition, Catherine Flon a cousu le premier. La devise du pays est « L’union fait la force ». L’hymne national, La Dessalinienne, a été composé à l’occasion du centenaire de l’indépendance."],
+["Artisanat","À Croix-des-Bouquets, des artisans découpent des plaques de fer, souvent récupérées sur de vieux bidons, pour en faire des œuvres d’art. À Jacmel, on fabrique des masques en papier mâché pour le carnaval."],
+["Cinéma","Le réalisateur haïtien Raoul Peck a signé « Lumumba » (2000) et « I Am Not Your Negro » (2016), un documentaire nommé aux Oscars."],
+["Cuisine","Le griot (porc frit), le diri ak djon djon (riz aux champignons noirs), le pikliz (légumes épicés) et l’akasan sont des classiques. La soupe joumou, mangée le 1er janvier pour fêter l’indépendance, est inscrite au patrimoine culturel immatériel de l’UNESCO depuis 2021."]]},
+{id:"sport",t:"Sport",e:[
+["Football","Le football est le sport le plus suivi. Les Grenadiers ont participé à la Coupe du monde 1974, où Emmanuel Sanon a marqué contre l’Italie et brisé la longue série d’invincibilité du gardien Dino Zoff."],
+["Athlétisme","Silvio Cator a battu le record du monde du saut en longueur en 1928. Il a aussi remporté la médaille d’argent aux Jeux olympiques d’Amsterdam la même année."],
+["Jeux olympiques","Haïti a remporté sa première médaille olympique à Paris en 1924, en bronze, avec l’équipe de tir."],
+["Joe Gaetjens, héros de 1950","Né à Port-au-Prince, Joe Gaetjens marque en 1950 le seul but du match où les États-Unis battent l’Angleterre à la Coupe du monde, l’une des plus grandes surprises de l’histoire du football."],
+["1973–1974 : champions de la CONCACAF","En 1973, Haïti gagne le championnat de la CONCACAF, organisé à Port-au-Prince, et se qualifie pour la Coupe du monde 1974 en Allemagne."],
+["2026 : le retour en Coupe du monde","Les Grenadiers retrouvent la Coupe du monde en 2026, pour la première fois depuis 1974. Dans le groupe C, ils perdent leurs trois matchs, notamment 0-3 contre le Brésil et 2-4 contre le Maroc. Mais ce retour reste un moment de fierté pour le pays."]]},
+{id:"religion",t:"Religion",e:[
+["Un pays de croyances multiples","Le catholicisme et le protestantisme comptent beaucoup de fidèles. La Constitution de 1987 garantit la liberté de culte."],
+["Le vodou","Le vodou est une religion née de traditions africaines, mêlées à des influences catholiques. Les fidèles honorent les lwa (esprits) avec des chants, des tambours et des danses, sous la conduite d’un oungan ou d’une manbo. L’État l’a reconnu officiellement en 2003."],
+["Pèlerinages","Chaque juillet, des milliers de pèlerins se rendent à Saut-d’Eau, en l’honneur de Notre-Dame du Mont-Carmel, une fête où se rejoignent traditions catholiques et vodou."],
+["La fête des Gédé","Les 1er et 2 novembre, les fidèles du vodou honorent les Gédé, esprits de la mort, notamment au grand cimetière de Port-au-Prince. Cette fête coïncide avec la Toussaint et la fête des Morts catholiques."],
+["Protestantisme","Le protestantisme s’est beaucoup développé depuis le XXe siècle, avec de nombreuses églises évangéliques et pentecôtistes."]]},
+{id:"lieux",t:"Lieux",e:[
+["La Citadelle Laferrière","Construite entre 1805 et 1820 sous le roi Henri Christophe, près de Milot, c’est l’une des plus grandes forteresses des Amériques. Elle domine le nord du pays et forme, avec le palais de Sans-Souci, un site classé au patrimoine mondial de l’UNESCO depuis 1982."],
+["Géographie","Haïti occupe le tiers ouest de l’île d’Hispaniola, qu’elle partage avec la République dominicaine. La capitale est Port-au-Prince. Le Pic la Selle, d’environ 2 680 mètres, est le point culminant."],
+["À découvrir","Jacmel et son Bassin Bleu, Cap-Haïtien, Labadee, l’île de la Gonâve et la côte des Arcadins comptent parmi les lieux les plus visités."],
+["Jacmel","Ville du sud-est connue pour ses maisons aux balcons de fer forgé, son carnaval et ses masques en papier mâché. Le Bassin Bleu, des cascades et des bassins d’eau turquoise, se trouve tout près."],
+["Cap-Haïtien","Deuxième ville du pays, appelée autrefois le « Paris des Antilles » quand elle s’appelait le Cap-Français. C’est la porte d’entrée vers la Citadelle Laferrière, Sans-Souci et le site de Vertières."],
+["Les Gonaïves","Ville où l’indépendance a été proclamée le 1er janvier 1804, d’où son surnom de « cité de l’Indépendance »."],
+["Parcs nationaux","Le parc national Macaya, dans le sud, abrite une forêt de montagne rare et de nombreuses espèces uniques. Le parc La Visite, près du Pic la Selle, est un lieu de randonnée."]]},
+{id:"personnages",t:"Personnages",e:[
+["Toussaint Louverture","Né vers 1743, ancien esclave devenu général, il dirige les armées de la révolution et gouverne la colonie. Capturé par les Français, il meurt au fort de Joux, en France, le 7 avril 1803."],
+["Jean-Jacques Dessalines","Ancien esclave et lieutenant de Toussaint, il commande l’armée indigène jusqu’à la victoire et proclame l’indépendance le 1er janvier 1804. L’hymne national porte son nom."],
+["Catherine Flon, Sanité Bélair et Marie-Jeanne Lamartinière","Trois femmes de la révolution. Selon la tradition, Catherine Flon a cousu le premier drapeau. Sanité Bélair, sergent, est fusillée en 1802. Marie-Jeanne Lamartinière se bat à la Crête-à-Pierrot."],
+["Anténor Firmin","Penseur et homme politique (1850-1911), il défend l’égalité des races humaines dans un livre publié en 1885."],
+["Jean Price-Mars","Médecin, écrivain et ethnologue (1876-1969). Son livre « Ainsi parla l’oncle » (1928) invite les Haïtiens à valoriser leur culture d’origine africaine."],
+["Jacques Roumain","Écrivain et militant (1907-1944), auteur de « Gouverneurs de la rosée », publié en 1944, l’un des grands classiques de la littérature haïtienne."],
+["Hector Hyppolite","Prêtre vodou et peintre (1894-1948), l’un des grands noms de la peinture haïtienne. Ses œuvres ont été admirées par André Breton."]]},
+{id:"fetes",t:"Fêtes",e:[
+["1er et 2 janvier","Le 1er janvier, on fête l’indépendance et on mange la soupe joumou. Le 2 janvier est le Jour des Aïeux, en mémoire des héros de l’indépendance."],
+["Carnaval et Rara","Le carnaval a lieu avant le carême, avec des défilés, des chars et de la musique. Le rara anime ensuite les rues durant le carême, jusqu’à Pâques."],
+["18 mai : Jour du drapeau","Le 18 mai est le Jour du drapeau et de l’Université, en souvenir de la création du drapeau à l’Arcahaie en 1803."],
+["17 octobre et 18 novembre","Le 17 octobre rappelle la mort de Dessalines. Le 18 novembre commémore la bataille de Vertières, qui a ouvert la voie à l’indépendance."]]},
+{id:"proverbes",t:"Proverbes",e:[
+["Dèyè mòn gen mòn","Derrière les montagnes, il y a d’autres montagnes. Après une difficulté, une autre peut venir : il faut persévérer."],
+["Piti piti zwazo fè nich li","Petit à petit, l’oiseau fait son nid. Avec de la patience, on réussit."],
+["Men anpil chay pa lou","Quand il y a beaucoup de mains, la charge n’est pas lourde. L’union fait la force."],
+["Sak vid pa kanpe","Un sac vide ne tient pas debout. Il faut manger pour avoir de la force."],
+["Bay kou bliye, pote mak sonje","Celui qui donne le coup oublie, celui qui porte la marque s’en souvient."],
+["Lespwa fè viv","L’espoir fait vivre."]]},
+{id:"musique",t:"Musique",e:[
+["Le kompa","Le kompa (ou compas direct) naît vers 1955 avec Nemours Jean-Baptiste, qui mêle méringue et rythmes de danse. Son rival Webert Sicot lance la cadence rampa. Des groupes comme Tabou Combo, né en 1968 à Pétion-Ville, ont porté le kompa dans le monde."],
+["Les orchestres du Cap","Fondé en 1948 au Cap-Haïtien, l’Orchestre Septentrional est l’un des plus anciens groupes du pays. Il est resté célèbre pour ses cuivres et ses chansons populaires."],
+["La musique racine","Apparue dans les années 1980 et 1990, la mizik rasin mélange tambours vodou, chants rituels et guitares électriques. Boukman Eksperyans, avec son titre « Kèmpè » en 1990, en est l’un des groupes les plus connus."],
+["Twoubadou et rara","Le twoubadou est une musique de troubadours, jouée à la guitare et au banjo, qui raconte l’amour et la vie quotidienne. Le rara, lui, se joue dans la rue avec des tambours et des trompettes en bambou, les vaksin."],
+["Le rap krèyol et la diaspora","Le rap en créole, porté par des groupes comme Barikad Crew, parle de la vie des quartiers. À l’étranger, Wyclef Jean, né près de Port-au-Prince, a connu le succès mondial avec les Fugees."]]},
+{id:"litterature",t:"Littérature",e:[
+["Les débuts du créole écrit","En 1883, Oswald Durand publie le poème « Choucoune », l’un des premiers grands poèmes en créole. Beaucoup plus tard, en 1975, Franckétienne publie « Dézafi », souvent présenté comme le premier roman en créole."],
+["Le roman social","Jacques Roumain a écrit sur la vie des paysans. Jacques Stephen Alexis, auteur de « Compère Général Soleil » (1955), a été tué en 1961 par le régime de Duvalier."],
+["Voix de femmes","Marie Vieux-Chauvet publie « Amour, Colère et Folie » en 1968, un livre interdit sous Duvalier. Edwidge Danticat est connue pour « Breath, Eyes, Memory » (1994). Yanick Lahens a reçu le prix Femina en 2014 pour « Bain de lune »."],
+["Dany Laferrière","Né à Port-au-Prince, il vit longtemps au Canada. Il remporte le prix Médicis en 2009 pour « L’Énigme du retour » et entre à l’Académie française en 2013."]]},
+{id:"gastronomie",t:"Gastronomie",e:[
+["Les plats du quotidien","Le diri ak pwa (riz aux haricots) accompagne souvent le légim, un ragoût de légumes, et la viande en sauce. Le griot (porc frit) et le tasso (bœuf ou chevreau séché puis frit) sont des plats de fête. Le pikliz, des légumes picés au vinaigre, relève presque tout."],
+["Fritures et collations","Le bannann peze (plantain écrasé et frit), l’akra (beignets de malanga) et le pen patat (gâteau de patate douce) se mangent partout, souvent dans la rue."],
+["Boissons","Le café haïtien est réputé. Le rhum Barbancourt, créé en 1862, est la grande fierté nationale. L’akasan, une boisson chaude de maïs, et le kremas, une crème de coco, sont aussi très appréciés."],
+["Pourquoi la soupe joumou ?","Du temps de la colonie, cette soupe de giraumon (courge) était réservée aux maîtres, et les esclaves n’avaient pas le droit d’en manger. Depuis l’indépendance, tout le monde en mange le 1er janvier, pour célébrer la liberté."]]},
+{id:"economie",t:"Économie",e:[
+["Agriculture","L’agriculture fait vivre une grande partie de la population. Le café, la mangue, le cacao et le vétiver sont parmi les produits les plus connus. Haïti est l’un des principaux producteurs d’huile de vétiver, utilisée en parfumerie."],
+["Les Madan Sara","Les Madan Sara sont des marchandes qui font circuler les produits entre les campagnes et les villes. Elles sont au cœur du commerce informel, qui fait vivre beaucoup de familles."],
+["La diaspora","Des millions d’Haïtiens vivent aux États-Unis, au Canada, en France, en République dominicaine et ailleurs. L’argent qu’ils envoient à leurs familles est une ressource très importante pour le pays."],
+["La gourde","La monnaie nationale est la gourde. Dans la vie courante, on parle souvent de « dollars haïtiens », une unité de compte égale à 5 gourdes."],
+["Industrie et défis","Des usines de textile travaillent pour l’exportation, notamment au parc industriel de Caracol, ouvert en 2012 dans le nord-est. Depuis 2021, l’insécurité sur les routes et dans la capitale pèse lourdement sur le commerce et la vie économique."]]}
+];
+var $=function(i){return document.getElementById(i)},cur="histoire";
+function norm(s){return s.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g,"")}
+function slug(s){return norm(s).replace(/[^a-z0-9]+/g,"-").replace(/^-|-$/g,"")}
+function shrink(f,w,cb){var i=new Image();i.onload=function(){var s=Math.min(1,w/i.width),c=document.createElement("canvas");c.width=i.width*s;c.height=i.height*s;c.getContext("2d").drawImage(i,0,0,c.width,c.height);cb(c.toDataURL("image/jpeg",.72))};i.src=URL.createObjectURL(f)}
+function card(a){var el=document.createElement("article"),h=document.createElement("h3"),p=document.createElement("p"),b=document.createElement("button");
+h.textContent=a[0];p.textContent=a[1];b.className="ghost";b.textContent="Écouter";b.onclick=function(){say(a[0]+". "+a[1])};
+var im=document.createElement("img"),lb=document.createElement("label"),inp=document.createElement("input"),k="ayiti-img:"+a[0];
+im.alt=a[0];im.style.cssText="display:none;max-width:100%;border-radius:6px;margin:0 0 12px";
+function put(u){im.src=u;im.style.display="block"}
+im.onload=function(){im.style.display="block"};
+im.onerror=function(){im.onerror=null;try{var sv=localStorage.getItem(k);if(sv)im.src=sv}catch(e){}};
+im.src="images/"+slug(a[0])+".jpg";
+lb.className="ghost btn";lb.style.marginLeft="8px";lb.textContent="Ajouter une photo";inp.type="file";inp.accept="image/*";inp.hidden=true;
+inp.onchange=function(){if(inp.files[0])shrink(inp.files[0],700,function(u){put(u);try{localStorage.setItem(k,u)}catch(e){}})};
+lb.append(inp);el.append(h,im,p,b,lb);return el}
+function show(id){cur=id;var c=D.filter(function(x){return x.id===id})[0];$("title").textContent=c.t;$("list").replaceChildren.apply($("list"),c.e.map(card));
+[].forEach.call($("nav").children,function(b){b.setAttribute("aria-pressed",b.dataset.id===id)})}
+D.forEach(function(c){var b=document.createElement("button");b.textContent=c.t;b.dataset.id=c.id;b.onclick=function(){stop();show(c.id);$("hero").scrollIntoView&&$("nav").scrollIntoView()};$("nav").append(b)});
+function search(){var q=$("q").value.trim();if(!q)return;var n=norm(q),r=[];
+D.forEach(function(c){c.e.forEach(function(a){if(norm(a[0]+" "+a[1]).indexOf(n)>-1)r.push(a)})});
+[].forEach.call($("nav").children,function(b){b.setAttribute("aria-pressed","false")});
+$("title").textContent=r.length+" résultat"+(r.length>1?"s":"")+" pour « "+q+" »";
+var l=$("list");l.replaceChildren.apply(l,r.map(card));
+var p=document.createElement("p");p.className="note";p.innerHTML="Pas assez ? ";var a=document.createElement("a");a.target="_blank";a.rel="noopener";a.href="https://duckduckgo.com/?q="+encodeURIComponent(q+" Haïti");a.textContent="Poursuivre la recherche sur le web";p.append(a);l.append(p);
+$("nav").scrollIntoView()}
+$("go").onclick=search;$("q").onkeydown=function(e){if(e.key==="Enter")search()};
+function stop(){if("speechSynthesis"in window)speechSynthesis.cancel()}
+function say(t){if(!("speechSynthesis"in window))return;stop();var u=new SpeechSynthesisUtterance(t);u.lang="fr-FR";speechSynthesis.speak(u)}
+$("readAll").onclick=function(){if("speechSynthesis"in window&&speechSynthesis.speaking){stop();return}
+say([].map.call($("list").querySelectorAll("article"),function(a){return a.children[0].textContent+". "+a.children[1].textContent}).join(" "))};
+/* Photo de fond */
+function setPhoto(u){$("hero").style.setProperty("--photo","url("+u+")")}
+try{var sv=localStorage.getItem("ayiti-photo");if(sv)setPhoto(sv)}catch(e){}
+$("pic").onchange=function(){var f=this.files[0];if(!f)return;var img=new Image();img.onload=function(){var s=Math.min(1,1400/img.width),c=document.createElement("canvas");c.width=img.width*s;c.height=img.height*s;c.getContext("2d").drawImage(img,0,0,c.width,c.height);var d=c.toDataURL("image/jpeg",.72);setPhoto(d);try{localStorage.setItem("ayiti-photo",d)}catch(e){}};img.src=URL.createObjectURL(f)};
+var t=new Image();t.onload=function(){setPhoto("images/citadelle.jpg")};t.src="images/citadelle.jpg";
+$("names").onclick=function(){var s=$("slugs");if(!s.hidden){s.hidden=true;return}s.hidden=false;var x="Fond d’accueil : images/citadelle.jpg\n";D.forEach(function(c){c.e.forEach(function(a){x+=a[0]+" : images/"+slug(a[0])+".jpg\n"})});s.textContent=x};
+/* Ambiance */
+var ac,master,nodes=[],on=false;
+function ambOn(){ac=ac||new(window.AudioContext||window.webkitAudioContext)();ac.resume();master=ac.createGain();master.gain.value=0;var lp=ac.createBiquadFilter();lp.type="lowpass";lp.frequency.value=900;master.connect(lp);lp.connect(ac.destination);master.gain.linearRampToValueAtTime(.2,ac.currentTime+3);
+[110,164.81,220,277.18,329.63].forEach(function(f,i){var o=ac.createOscillator(),g=ac.createGain(),l=ac.createOscillator(),lg=ac.createGain();o.frequency.value=f;g.gain.value=.2;l.frequency.value=.05+i*.03;lg.gain.value=.12;l.connect(lg);lg.connect(g.gain);o.connect(g);g.connect(master);o.start();l.start();nodes.push(o,l)});on=true;ui()}
+function ambOff(){if(!on)return;master.gain.linearRampToValueAtTime(0,ac.currentTime+1.2);var n=nodes;nodes=[];setTimeout(function(){n.forEach(function(x){x.stop()})},1400);on=false;ui()}
+function ui(){$("amb").textContent=on?"Arrêter l’ambiance":"Lancer l’ambiance";$("fab").textContent=on?"❚❚":"♪"}
+function toggle(){if(on)ambOff();else{$("player").pause();ambOn()}}
+$("amb").onclick=toggle;$("fab").onclick=toggle;
+var tr=[],ti=0;
+$("files").onchange=function(){tr=[].map.call(this.files,function(f){return URL.createObjectURL(f)});if(!tr.length)return;ambOff();ti=0;var p=$("player");p.hidden=false;p.src=tr[0];p.play()};
+$("player").onended=function(){if(tr.length>1){ti=(ti+1)%tr.length;this.src=tr[ti];this.play()}};
+show("histoire");
+</script>
+</body>
+</html>
